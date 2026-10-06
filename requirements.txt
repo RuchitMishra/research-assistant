@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic-settings
+python-dotenv
+langchain
+langchain-google-genai
+langchain-community
+langchain-qdrant
+langchain-tavily
+langgraph
+qdrant-client
+pypdf
+docx2txt
+beautifulsoup4
+lxml
