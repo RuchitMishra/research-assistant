@@ -47,6 +47,9 @@ Still insufficient?
         ↓
 Synthesize Answer
 
+```
+
+
 
 - **plan**: rewrites the question so it makes sense on its own (using the conversation history for follow-ups like "and what about the second one?"), splits compound questions into sub-questions, and decides whether the question is too vague to answer.
 - **retrieve**: searches Qdrant once per sub-question and merges the results.
