@@ -1,0 +1,11 @@
+[
+  {"id": 1, "category": "simple", "session_id": "e1", "question": "Advancements in Vision Capabilities", "expected_source": ["knowledge_base"]},
+  {"id": 2, "category": "simple", "session_id": "e2", "question": "What is this image about?", "expected_source": ["knowledge_base"]},
+  {"id": 3, "category": "compound", "session_id": "e3", "question": "How does the reinforcement learning approach discussed in summary-notes (2).pdf compare with machine learning definition described in test.txt?", "expected_source": ["knowledge_base"]},
+  {"id": 4, "category": "compound", "session_id": "e4", "question": "Tell about the image shown in Logo_with_bg,png and how much AI is capable to process images as given in summary-notes (2).pdf?", "expected_source": ["knowledge_base", "mixed"]},
+  {"id": 5, "category": "follow-up", "session_id": "e5", "question": "What are its main limitations?", "expected_source": ["knowledge_base", "mixed", "web"]},
+  {"id": 6, "category": "follow-up", "session_id": "e5", "question": "Can you explain the most important one in more detail?", "expected_source": ["knowledge_base", "mixed", "web"]},{"id": 7, "category": "ambiguous", "session_id": "e7", "question": "Tell me more about it.", "expected_source": ["clarification_needed"]},
+  {"id": 8, "category": "ambiguous", "session_id": "e8", "question": "What is the difference between them?", "expected_source": ["clarification_needed"]},
+  {"id": 9, "category": "out-of-KB", "session_id": "e9", "question": "Who is the current Prime Minister of Japan?", "expected_source": ["web"]},
+  {"id": 10, "category": "out-of-KB", "session_id": "e10", "question": "What is the boiling point of ethanol in Celsius?", "expected_source": ["web"]}
+]

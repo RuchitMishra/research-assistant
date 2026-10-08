@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Research Assistant</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{font-family:system-ui,sans-serif;max-width:900px;margin:20px auto;padding:0 14px;color:#222}
+h1{font-size:20px}.box{border:1px solid #ddd;border-radius:8px;padding:12px;margin-bottom:14px}
+button{padding:7px 14px;cursor:pointer}input[type=text]{width:70%;padding:8px}
+.msg{margin:10px 0;padding:10px;border-radius:8px;background:#f5f5f5;white-space:pre-wrap}
+.q{background:#e8f0fe}.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;background:#222;color:#fff;margin-right:6px}
+small,.trace{color:#555;font-size:12px}.trace{margin-top:6px}details{margin-top:6px}
+.cols{display:flex;gap:10px}.cols>div{flex:1}
+</style></head><body>
+<h1>Multi-Step Research Assistant <small>(<a href="/docs">API docs</a>)</small></h1>
+<div class="box"><b>Knowledge base</b> <button onclick="loadDocs()">Refresh</button>
+<div id="docs"><small>loading...</small></div><br>
+<input type="file" id="files" multiple> <button onclick="upload()">Upload</button> <small id="up"></small></div>
+<div class="box"><div id="chat"></div>
+<input type="text" id="q" placeholder="Ask a question..." onkeydown="if(event.key==='Enter')ask()">
+<button onclick="ask()">Ask</button>
+<label><input type="checkbox" id="cmp"> compare with naive RAG</label>
+<button onclick="sid=newId();document.getElementById('chat').innerHTML=''">New session</button></div>
+<script>
+const newId=()=>'web-'+Math.random().toString(36).slice(2,9);let sid=newId();
+const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+async function loadDocs(){const r=await fetch('/documents');const d=await r.json();
+ document.getElementById('docs').innerHTML=d.length?d.map(x=>`${esc(x.filename)} <small>(${x.chunks} chunks)</small>`).join('<br>'):'<small>empty</small>'}
+async function upload(){const f=document.getElementById('files').files;if(!f.length)return;
+ const fd=new FormData();for(const x of f)fd.append('files',x);document.getElementById('up').textContent='ingesting...';
+ try{const r=await fetch('/documents',{method:'POST',body:fd});const d=await r.json();
+ document.getElementById('up').textContent=d.map(x=>x.filename+': '+x.status).join(' | ')}catch(e){document.getElementById('up').textContent='error '+e}
+ loadDocs()}
+function render(d,label){if(!d.answer)return `<div class="msg">Error: ${esc(d.detail||'unknown')}</div>`;
+ const c=(d.citations||[]).map(x=>`${esc(x.doc)}${x.page?' p.'+x.page:''}: ${esc(x.snippet.slice(0,140))}...`).join('<br>');
+ const w=(d.web_sources||[]).map(x=>`<a href="${esc(x.url)}" target="_blank">${esc(x.title||x.url)}</a>`).join('<br>');
+ return `<div class="msg"><span class="tag">${label}</span><span class="tag">${esc(d.answer_source)}</span><br>${esc(d.answer)}
+ ${c?`<details><summary>KB citations</summary><small>${c}</small></details>`:''}${w?`<details open><summary>Web sources</summary><small>${w}</small></details>`:''}
+ <div class="trace"><b>Trace:</b><br>${(d.reasoning_trace||[]).map(esc).join('<br>')}</div></div>`}
+async function call(path,q){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,session_id:sid})});return r.json()}
+async function ask(){const i=document.getElementById('q');const q=i.value.trim();if(!q)return;i.value='';
+ const chat=document.getElementById('chat');chat.innerHTML+=`<div class="msg q">${esc(q)}</div>`;
+ const cmp=document.getElementById('cmp').checked;const slot=document.createElement('div');slot.textContent='thinking...';chat.appendChild(slot);
+ const [a,n]=await Promise.all([call('/ask',q),cmp?call('/ask-naive',q):null]);
+ slot.innerHTML=n?`<div class="cols"><div>${render(a,'multi-step graph')}</div><div>${render(n,'naive RAG')}</div></div>`:render(a,'multi-step graph')}
+loadDocs();
+</script></body></html>

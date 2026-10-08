@@ -1,0 +1,3 @@
+Machine learning is a branch of artificial intelligence. It has 3 types: supervised , unsupervised and reinforcement learning.
+Supervised learning uses labelled training data. unsupervised learning uses unlabelled data . 
+Reinforcement learning is reward based learning where the agent learns from mistakes . 
