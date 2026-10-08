@@ -133,8 +133,9 @@ def synthesize_node(state: GraphState) -> dict:
     prompt = f"""Answer using ONLY the sources below. Never use outside knowledge.
 - Answer every part of the question that the sources support; for parts they don't support, say clearly what is not found.
 - If the sources don't contain the answer at all, say so and list no used_sources.
-- Mention which file or website each key fact came from. Be concise.
-- used_sources: IDs (e.g. KB1, W2) of sources you actually relied on.
+- Mention where key facts came from by file name or website name (e.g. "according to report.pdf"). NEVER write IDs like KB1 or W2 inside the answer text.
+- If several sources agree, state the fact once instead of repeating it per source. Be concise and well organized (short paragraphs or bullets).
+- used_sources: IDs (e.g. KB1, W2) of sources you actually relied on (this field only, not in the answer).
 
 Chat history:
 {_history(state)}

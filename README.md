@@ -74,3 +74,29 @@ Enough evidence?
               Web Search
                   ↓
              Synthesize Answer
+
+
+## Why not naive RAG?
+
+A simple RAG system retrieves documents once and generates an answer from the retrieved context. It does not check whether the retrieved information is sufficient or use web search as a fallback.
+
+**Example question:**
+
+> What is the boiling point of ethanol in Celsius?
+
+**Naive RAG:**  
+"Based on the provided context, there is no mention of the boiling point of ethanol."
+
+**Multi-Step RAG:**  
+"The boiling point of ethanol in Celsius is approximately 78.37 degrees Celsius."
+
+The multi-step system recognized that the knowledge base did not contain the required information and used web search to answer the question.
+
+**Trace:**
+
+```text
+Naive RAG:
+retrieve → generate
+
+Multi-Step RAG:
+plan → retrieve → grade → retry retrieval → grade → web search → synthesize
