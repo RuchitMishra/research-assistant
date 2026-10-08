@@ -158,5 +158,5 @@ QDRANT_COLLECTION=kb
 Then open http://localhost:8000/docs or http://localhost:8000/ui. There is also a Dockerfile; Render builds from it.
 
 ```bash
-python eval/run_eval.py https://research-assistant-3j2e.onrender.com
+https://research-assistant-3j2e.onrender.com
 ```
