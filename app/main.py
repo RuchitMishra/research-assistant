@@ -6,7 +6,7 @@ from app.api.routes import router
 app = FastAPI(
     title="Multi-Step Research Assistant API",
     description="Agentic RAG over a document knowledge base with web fallback.",
-    version="0.2.0",
+    version="0.3.0",
 )
 app.include_router(router)
 
