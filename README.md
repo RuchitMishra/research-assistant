@@ -13,26 +13,39 @@ It runs on Render's free tier, so after a period of inactivity the first request
 ## How it works
 
 Every question to `/ask` goes through these steps:
+## How It Works
 
+Every question to `/ask` goes through these steps:
+
+```text
 Question
    ↓
 Plan
    ↓
-Ambiguous? ── Yes ──→ Clarify
-   ↓ No
+Ambiguous?
+   ├── Yes → Clarify
+   │
+   └── No
+        ↓
 Retrieve from Knowledge Base
-   ↓
-Grade
-   ↓
+        ↓
+Grade Evidence
+        ↓
 Enough evidence?
    ├── Yes → Synthesize Answer
-   └── No → Retry Retrieval with better queries
-                  ↓
-             Still insufficient?
-                  ↓
-              Web Search
-                  ↓
-             Synthesize Answer
+   │
+   └── No
+        ↓
+Retry Retrieval with better queries
+        ↓
+Still insufficient?
+   ├── No → Grade Evidence again
+   │
+   └── Yes
+        ↓
+    Web Search
+        ↓
+Synthesize Answer
 
 
 - **plan**: rewrites the question so it makes sense on its own (using the conversation history for follow-ups like "and what about the second one?"), splits compound questions into sub-questions, and decides whether the question is too vague to answer.
